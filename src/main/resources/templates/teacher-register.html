@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新規登録</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;  /* 最大幅を設定 */
+            margin: 0 auto;    /* 中央に配置 */
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* パディングとボーダーを含めて幅を計算 */
+        }
+        button {
+            font-size: 18px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>新規登録</h1>
+    <form id="registerForm">
+        <input type="text" id="teacherName" placeholder="名前" required>
+        <input type="email" id="teacherEmail" placeholder="メールアドレス" required>
+        <input type="password" id="teacherPassword" placeholder="パスワード" required>
+        <button type="button" onclick="register()">登録</button>
+    </form>
+</div>
+
+<script>
+    function register() {
+        const teacherName = document.getElementById('teacherName').value;
+        const teacherEmail = document.getElementById('teacherEmail').value;
+        const teacherPassword = document.getElementById('teacherPassword').value;
+
+        const formData = {
+            name: teacherName,
+            email: teacherEmail,
+            password: teacherPassword
+        };
+
+        fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('登録が完了しました！');
+                location.href = 'teacher-login.html';
+            } else {
+                alert('登録に失敗しました。');
+            }
+        })
+        .catch(error => {
+            console.error('エラーが発生しました:', error);
+        });
+    }
+</script>
+
+</body>
+</html>
+

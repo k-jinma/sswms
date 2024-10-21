@@ -1,0 +1,176 @@
+<html lang="ja"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テスト作成</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+        .question-group {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>テスト作成</h1>
+
+    <!-- テスト情報の入力 -->
+    <div class="form-group">
+        <label for="testName">テスト名</label>
+        <input type="text" id="testName" placeholder="テストの名前を入力" required>
+    </div>
+
+    <div class="form-group">
+        <label for="questionCount">問題数</label>
+        <input type="number" id="questionCount" placeholder="問題数を入力" min="1" required>
+    </div>
+
+    <button class="submit-btn" onclick="generateQuestionForms()">問題フォームを生成</button>
+
+    <!-- 問題入力フォームが表示される部分 -->
+    <div id="questionForms"></div>
+
+    <button class="submit-btn" style="display:none;" id="submitTestBtn" onclick="submitTest()">テストを保存</button>
+</div>
+
+<script>
+    // フォームを生成する関数
+    function generateQuestionForms() {
+        const questionCount = document.getElementById('questionCount').value;
+        const testName = document.getElementById('testName').value;
+        const questionFormsContainer = document.getElementById('questionForms');
+
+        // すでに生成されたフォームがある場合はリセット
+        questionFormsContainer.innerHTML = '';
+
+        if (testName === '' || questionCount <= 0) {
+            alert('テスト名と問題数を正しく入力してください。');
+            return;
+        }
+
+        // 指定された問題数に応じてフォームを動的に生成
+        for (let i = 1; i <= questionCount; i++) {
+            const questionGroup = document.createElement('div');
+            questionGroup.classList.add('question-group');
+            
+            questionGroup.innerHTML = `
+                <h3>問題 ${i}</h3>
+                <div class="form-group">
+                    <label for="question${i}">問題文</label>
+                    <textarea id="question${i}" name="question${i}" rows="3" placeholder="問題文を入力" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>選択肢</label>
+                    <input type="text" name="choice${i}-1" placeholder="選択肢 1" required><br><br>
+                    <input type="text" name="choice${i}-2" placeholder="選択肢 2" required><br><br>
+                    <input type="text" name="choice${i}-3" placeholder="選択肢 3" required><br><br>
+                    <input type="text" name="choice${i}-4" placeholder="選択肢 4" required><br><br>
+                </div>
+                <div class="form-group">
+                    <label for="correctAnswer${i}">正解 (1-4)</label>
+                    <input type="number" id="correctAnswer${i}" name="correctAnswer${i}" min="1" max="4" required>
+                </div>
+            `;
+
+            questionFormsContainer.appendChild(questionGroup);
+        }
+
+        // 最終保存ボタンを表示
+        document.getElementById('submitTestBtn').style.display = 'block';
+    }
+
+    // テストデータを送信する関数
+    function submitTest() {
+        const testName = document.getElementById('testName').value;
+        const questionCount = document.getElementById('questionCount').value;
+        let questions = [];
+
+        for (let i = 1; i <= questionCount; i++) {
+            const questionText = document.getElementById(`question${i}`).value;
+            const choice1 = document.querySelector(`input[name="choice${i}-1"]`).value;
+            const choice2 = document.querySelector(`input[name="choice${i}-2"]`).value;
+            const choice3 = document.querySelector(`input[name="choice${i}-3"]`).value;
+            const choice4 = document.querySelector(`input[name="choice${i}-4"]`).value;
+            const correctAnswer = document.getElementById(`correctAnswer${i}`).value;
+
+            questions.push({
+                questionText: questionText,
+                choices: [choice1, choice2, choice3, choice4],
+                correctAnswer: correctAnswer
+            });
+        }
+
+        const testData = {
+            testName: testName,
+            questions: questions
+        };
+
+        // データをバックエンドに送信
+        fetch('/save-test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('テストが保存されました！');
+            console.log('テストデータ:', testData);
+        })
+        .catch(error => {
+            console.error('エラーが発生しました:', error);
+        });
+    }
+</script>
+
+</body>
+</html>

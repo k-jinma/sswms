@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成績管理</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 800px;
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f9f9f9;
+        }
+        button {
+            padding: 10px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>成績管理</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>生徒ID</th>
+                <th>生徒名</th>
+                <th>テスト名</th>
+                <th>得点</th>
+            </tr>
+        </thead>
+        <tbody id="gradesTable">
+            <!-- ここに成績データが動的に追加される -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // 成績データをサーバーから取得し、表示する関数
+    function fetchGrades() {
+        fetch('/get-grades')  // 成績データを取得するAPIエンドポイント
+            .then(response => response.json())
+            .then(data => {
+                const gradesTable = document.getElementById('gradesTable');
+
+                // テーブルに成績データを追加
+                data.forEach(grade => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${grade.studentId}</td>
+                        <td>${grade.studentName}</td>
+                        <td>${grade.testName}</td>
+                        <td>${grade.score}</td>
+                    `;
+                    gradesTable.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('成績データの取得に失敗しました:', error);
+            });
+    }
+
+    // ページ読み込み時に成績データを取得
+    window.onload = fetchGrades;
+</script>
+
+</body>
+</html>

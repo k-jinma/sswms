@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教師ログイン</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"]{
+            font-size: 18px;
+            margin: 10px 0;
+            border: none;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover{
+            background-color: #218838;
+        }
+        .register-link {
+            margin-top: 20px;
+            display: block;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        .error{
+            color: red;
+            font-size: 12px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>教師ログイン</h1>
+    <p>メールアドレスとパスワードを入力してください</p>
+    <p class="error" th:text="${err}"></p>
+    <form action="/login" method="post">
+        <input type="email" name="email" id="teacherEmail" placeholder="メールアドレス">
+        <input type="password" name="password" id="password" placeholder="パスワード">
+        <input type="submit" value="Login"></input>
+    </form>
+    <a href="/register" class="register-link">新規登録はこちら</a>
+</div>
+
+</body>
+</html>
+
