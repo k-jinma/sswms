@@ -34,11 +34,9 @@ public class Login {
 
     @PostMapping("login")
     public String login(@RequestParam String email, @RequestParam String password, Model model){
-        // デモ用の固定パスワードを設定
-        String demoEmail = "test@test";
-        String demoPassword = "test";  
-
+        
         String sql = "SELECT name FROM demo_user WHERE mail = ? AND password = ?";
+
         try{
             String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
 
@@ -48,17 +46,6 @@ public class Login {
             return "teacher-login";
         }
         return "teacher-dashboard";
-
-
-
-        // if( email.equals(demoEmail) && password.equals(demoPassword) ){
-        //     return "teacher-dashboard";
-
-        // }else{
-        //     String errMessage = "ユーザー名かパスワードが異なります";
-        //     model.addAttribute("err", errMessage);
-        //     return "teacher-login";
-        // }
 
     }    
         
