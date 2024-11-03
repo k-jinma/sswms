@@ -1,7 +1,5 @@
 package com.example.sswms.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,13 +31,13 @@ public class Login {
     }
 
     @PostMapping("login")
-    public String login(@RequestParam String email, @RequestParam String password, Model model){
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
         
         String sql = "SELECT name FROM demo_user WHERE mail = ? AND password = ?";
 
         try{
             String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
-
+            System.out.println(result);
         }catch(EmptyResultDataAccessException e){
             String errMessage = "ユーザー名かパスワードが異なります";
             model.addAttribute("err", errMessage);
