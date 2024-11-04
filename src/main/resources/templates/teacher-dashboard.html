@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,8 +40,8 @@
 <div class="container">
     <h1 id="dashboardTitle">教師ダッシュボード</h1>
     <p>次の操作を選択してください:</p>
-    <button onclick="location.href='/create'">問題作成</button>
-    <button onclick="location.href='teacher-grade-management.html'">成績管理</button>
+    <a th:href="@{/create(username=${name})}"><button>問題作成</button></a>
+    <a href="teacher-grade-management.html"><button>成績管理</button></a>
 
 </div>
 

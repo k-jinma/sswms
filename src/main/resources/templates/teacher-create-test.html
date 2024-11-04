@@ -163,7 +163,7 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert('テストが保存されました！');
+            alert(data.message);
             console.log('テストデータ:', testData);
         })
         .catch(error => {
