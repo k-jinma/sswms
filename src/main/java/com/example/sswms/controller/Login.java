@@ -33,11 +33,12 @@ public class Login {
     @PostMapping("login")
     public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
         
-        String sql = "SELECT name FROM demo_user WHERE mail = ? AND password = ?";
+        String sql = "SELECT name FROM teacher WHERE mail = ? AND password = ?";
 
         try{
             String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
-            System.out.println(result);
+            model.addAttribute("name", result);
+            
         }catch(EmptyResultDataAccessException e){
             String errMessage = "ユーザー名かパスワードが異なります";
             model.addAttribute("err", errMessage);
