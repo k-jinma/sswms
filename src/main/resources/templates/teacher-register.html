@@ -45,15 +45,16 @@
 
 <div class="container">
     <h1>新規登録</h1>
-    <form id="registerForm">
-        <input type="text" id="teacherName" placeholder="名前" required>
-        <input type="email" id="teacherEmail" placeholder="メールアドレス" required>
-        <input type="password" id="teacherPassword" placeholder="パスワード" required>
-        <button type="button" onclick="register()">登録</button>
+    <form id="registerForm" action="/create-teacher" method="post">
+        <input type="text" id="teacherName" name="name" placeholder="名前" required>
+        <input type="email" id="teacherEmail" name="email" placeholder="メールアドレス" required>
+        <input type="password" id="teacherPassword" name="password" placeholder="パスワード" required>
+        <input type="submit" value="登録">
+        <!-- <button type="button" onclick="register()">登録</button> -->
     </form>
 </div>
 
-<script>
+<!-- <script>
     function register() {
         const teacherName = document.getElementById('teacherName').value;
         const teacherEmail = document.getElementById('teacherEmail').value;
@@ -85,7 +86,7 @@
             console.error('エラーが発生しました:', error);
         });
     }
-</script>
+</script> -->
 
 </body>
 </html>
