@@ -165,6 +165,14 @@
         .then(data => {
             alert(data.message);
             console.log('テストデータ:', testData);
+
+            // 現在のURLを取得
+            const urlParams = new URLSearchParams(window.location.search);
+            // usernameパラメータを取得
+            const username = urlParams.get('username');
+            // /loginにリダイレクト URLパラメータusernameを渡す
+            window.location.href = '/login?username=' + encodeURIComponent(username);
+
         })
         .catch(error => {
             console.error('エラーが発生しました:', error);
