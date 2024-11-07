@@ -25,13 +25,18 @@ public class Login {
     
 
     @GetMapping("login")
-    public String login(){
+    public String login(@RequestParam("username") String username){
+
+        //TODO: あとでセッション管理などに変更
+        if( !username.isEmpty() ){
+            return "teacher-dashboard";
+        }
 
         return "teacher-login";
     }
 
     @PostMapping("login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model ) {
         
         String sql = "SELECT name FROM teacher WHERE mail = ? AND password = ?";
 
@@ -46,7 +51,9 @@ public class Login {
         }
         return "teacher-dashboard";
 
-    }    
+    }
+
+
         
 
 }
