@@ -25,7 +25,7 @@ public class CreateTestRest {
     public ResponseEntity<String> showCreate(@RequestBody TestData testData) {
     
         try {
-            String sql1_0 = "SELECT COUNT(*) FROM test";
+            String sql1_0 = "SELECT MAX(test_id) FROM test";
             int testId = jdbcTemplate.queryForObject(sql1_0, Integer.class) + 1;
 
             String sql1_1 = "INSERT INTO test (test_id, test_name, q_count) VALUES (?, ?, ?)";
@@ -47,7 +47,7 @@ public class CreateTestRest {
                 }else {
                     sql2 = "INSERT INTO contents (test_id, q_no, q_text, sel1, sel2, sel3, sel4, ans4) VALUES (?, ?, ?, ?, ? ,? ,? ,?)";
                 }
-                jdbcTemplate.update(sql2, testId, qNo, question.getQuestionText(), question.getChoices().get(0), question.getChoices().get(1), question.getChoices().get(2), question.getChoices().get(3), 'Y');
+                jdbcTemplate.update(sql2, testId, qNo, question.getQuestionText(), question.getChoices().get(0), question.getChoices().get(1), question.getChoices().get(2), question.getChoices().get(3), "Y");
                 System.out.println(sql2);
 
                 qNo++;
