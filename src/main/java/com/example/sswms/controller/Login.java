@@ -25,7 +25,7 @@ public class Login {
     
 
     @GetMapping("login")
-    public String login(@RequestParam("username") String username){
+    public String login(@RequestParam(value = "username", defaultValue = "") String username){  //デフォルト値が空文字になるので、空文字の場合はログイン画面を表示
 
         //TODO: あとでセッション管理などに変更
         if( !username.isEmpty() ){
