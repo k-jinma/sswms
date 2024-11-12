@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>教師ログイン</title>
+    <title>生徒新規登録</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@
             max-width: 400px;
             margin: 0 auto;
         }
-        input {
+        input, button {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -27,7 +27,7 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-        input[type="submit"]{
+        button {
             font-size: 18px;
             margin: 10px 0;
             border: none;
@@ -36,40 +36,23 @@
             color: white;
             transition: background-color 0.3s ease;
         }
-        input[type="submit"]:hover{
+        button:hover {
             background-color: #218838;
         }
-        .register-link {
-            margin-top: 20px;
-            display: block;
-            color: #007bff;
-            text-decoration: none;
-        }
-        .register-link:hover {
-            text-decoration: underline;
-        }
-
-        .error{
-            color: red;
-            font-size: 12px;
-        }
-
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>教師ログイン</h1>
-    <p>メールアドレスとパスワードを入力してください</p>
-    <p class="error" th:text="${err}"></p>
-    <form action="/teacher-login" method="post">
-        <input type="email" name="email" id="teacherEmail" placeholder="メールアドレス">
-        <input type="password" name="password" id="password" placeholder="パスワード">
-        <input type="submit" value="Login"></input>
+    <h1>生徒新規登録</h1>
+    <p th:text="${errMessage}"></p>
+    <form id="registerForm" action="/create-student" method="POST">
+        <input type="text" id="studentName" name="name" placeholder="名前" required>
+        <input type="email" id="studentEmail" name="email" placeholder="メールアドレス" required>
+        <input type="password" id="studentPassword" name="password" placeholder="パスワード" required>
+        <input type="submit" value="登録">
     </form>
-    <a href="/register" class="register-link">新規登録はこちら</a>
 </div>
 
 </body>
 </html>
-

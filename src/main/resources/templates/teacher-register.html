@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
             max-width: 400px;  /* 最大幅を設定 */
             margin: 0 auto;    /* 中央に配置 */
         }
-        input, button {
+        input, input[type="submit"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 20px;
@@ -27,7 +27,7 @@
             border-radius: 5px;
             box-sizing: border-box; /* パディングとボーダーを含めて幅を計算 */
         }
-        input[type="submit"]  {
+        input[type="submit"] {
             font-size: 18px;
             margin: 10px 0;
             border: none;
@@ -39,7 +39,7 @@
         input[type="submit"]:hover {
             background-color: #218838;
         }
-        .err{
+        .err {
             color: red;
         }
     </style>
@@ -48,13 +48,12 @@
 
 <div class="container">
     <h1>新規登録</h1>
-    <p class="err" th:text="${message}"></p>
-    <form id="registerForm" action="/create-teacher" method="post">
+    <p class="err" th:text="${errMessage}"></p>
+    <form id="registerForm" action="/create-teacher" method="POST">
         <input type="text" id="teacherName" name="name" placeholder="名前" required>
         <input type="email" id="teacherEmail" name="email" placeholder="メールアドレス" required>
         <input type="password" id="teacherPassword" name="password" placeholder="パスワード" required>
         <input type="submit" value="登録">
-        <!-- <button type="button" onclick="register()">登録</button> -->
     </form>
 </div>
 
