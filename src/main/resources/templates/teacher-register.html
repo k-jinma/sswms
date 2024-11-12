@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,7 @@
             border-radius: 5px;
             box-sizing: border-box; /* パディングとボーダーを含めて幅を計算 */
         }
-        button {
+        input[type="submit"]  {
             font-size: 18px;
             margin: 10px 0;
             border: none;
@@ -36,8 +36,11 @@
             color: white;
             transition: background-color 0.3s ease;
         }
-        button:hover {
+        input[type="submit"]:hover {
             background-color: #218838;
+        }
+        .err{
+            color: red;
         }
     </style>
 </head>
@@ -45,6 +48,7 @@
 
 <div class="container">
     <h1>新規登録</h1>
+    <p class="err" th:text="${message}"></p>
     <form id="registerForm" action="/create-teacher" method="post">
         <input type="text" id="teacherName" name="name" placeholder="名前" required>
         <input type="email" id="teacherEmail" name="email" placeholder="メールアドレス" required>
