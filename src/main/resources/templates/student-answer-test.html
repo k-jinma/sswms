@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テスト解答</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .question-group {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>テスト解答</h1>
+
+    <!-- テスト問題の表示エリア -->
+    <div id="testQuestions"></div>
+
+    <!-- テストの送信ボタン -->
+    <button class="submit-btn" onclick="submitAnswers()">テストを送信</button>
+</div>
+
+<script>
+    // サーバーからテストデータを取得して表示する関数
+    function loadTest() {
+        fetch('/get-test')  // テストデータを取得するAPIエンドポイント
+            .then(response => response.json())
+            .then(data => {
+                const testQuestionsContainer = document.getElementById('testQuestions');
+
+                // テスト名の表示
+                const testTitle = document.createElement('h2');
+                testTitle.innerText = data.testName;
+                testQuestionsContainer.appendChild(testTitle);
+
+                // 各問題を動的に生成して表示
+                data.questions.forEach((question, index) => {
+                    const questionGroup = document.createElement('div');
+                    questionGroup.classList.add('question-group');
+                    
+                    questionGroup.innerHTML = `
+                        <h3>問題 ${index + 1}</h3>
+                        <p>${question.questionText}</p>
+                        <div>
+                            ${question.choices.map((choice, i) => `
+                                <label>
+                                    <input type="radio" name="question${index}" value="${i + 1}" required>
+                                    ${choice}
+                                </label><br>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                    testQuestionsContainer.appendChild(questionGroup);
+                });
+            })
+            .catch(error => {
+                console.error('テストデータの取得に失敗しました:', error);
+            });
+    }
+
+    // 生徒の解答をサーバーに送信する関数
+    function submitAnswers() {
+        const answers = [];
+        const questionGroups = document.querySelectorAll('.question-group');
+
+        questionGroups.forEach((group, index) => {
+            const selectedAnswer = group.querySelector(`input[name="question${index}"]:checked`);
+            if (selectedAnswer) {
+                answers.push({
+                    questionIndex: index,
+                    selectedAnswer: selectedAnswer.value
+                });
+            } else {
+                alert(`問題 ${index + 1} に答えていません。`);
+                return;
+            }
+        });
+
+        const submissionData = { answers: answers };
+
+        // サーバーに解答を送信
+        fetch('/submit-test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(submissionData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('テストが送信されました！');
+                // 任意のページにリダイレクトする場合
+                // location.href = '/some-page';
+            } else {
+                alert('テストの送信に失敗しました。');
+            }
+        })
+        .catch(error => {
+            console.error('エラーが発生しました:', error);
+        });
+    }
+
+    // ページロード時にテストを読み込む
+    window.onload = loadTest;
+</script>
+
+</body>
+</html>

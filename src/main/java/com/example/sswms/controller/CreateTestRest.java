@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +19,9 @@ public class CreateTestRest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @PostMapping("/save-test")
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<String> showCreate(@RequestBody TestData testData) {
-    
+    @PostMapping("/save-test")                              //モデル（model）クラス
+    public ResponseEntity<String> testCreate( @RequestBody TestData testData ){
+
         try {
             String sql1_0 = "SELECT MAX(test_id) FROM test";
             int testId = jdbcTemplate.queryForObject(sql1_0, Integer.class) + 1;
@@ -38,7 +36,7 @@ public class CreateTestRest {
     
                 String sql2;
                 String correctAnswer = question.getCorrectAnswer();
-                if(correctAnswer.equals("1")) {
+                if(correctAnswer.equals("1")) { 
                     sql2 = "INSERT INTO contents (test_id, q_no, q_text, sel1, sel2, sel3, sel4, ans1) VALUES (?, ?, ?, ?, ? ,? ,? ,?)";
                 }else if(correctAnswer.equals("2")) {
                     sql2 = "INSERT INTO contents (test_id, q_no, q_text, sel1, sel2, sel3, sel4, ans2) VALUES (?, ?, ?, ?, ? ,? ,? ,?)";
@@ -60,6 +58,7 @@ public class CreateTestRest {
             // 例外が発生した場合、トランザクションはロールバックされ、ここが実行されます
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("{\"message\": \"データの保存に失敗しました\"}");
         }
+
 
     }
 }

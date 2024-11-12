@@ -152,7 +152,7 @@
             testName: testName,
             questions: questions
         };
-
+//CreateTestRest.java
         // データをバックエンドに送信
         fetch('/save-test', {
             method: 'POST',
@@ -163,16 +163,15 @@
         })
         .then(response => response.json())
         .then(data => {
-            alert(data.message);
+            alert('テストが保存されました！');
             console.log('テストデータ:', testData);
 
-            // 現在のURLを取得
+            // 現在のURLを取得　
             const urlParams = new URLSearchParams(window.location.search);
-            // mailパラメータを取得
-            const mail = urlParams.get('mail');
-            // /loginにリダイレクト URLパラメータmailを渡す
-            window.location.href = '/login?mail=' + encodeURIComponent(mail);
-
+            // emailパラメータを取得
+            const email = urlParams.get('email');
+            // /loginにリダイレクト URLパラメータemailを渡す
+            window.location.href = '/login?email=' + encodeURIComponent(email);
         })
         .catch(error => {
             console.error('エラーが発生しました:', error);

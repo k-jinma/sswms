@@ -17,43 +17,70 @@ public class Login {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
-
-    @GetMapping("")
+    
+    @GetMapping("teacher")
     public String redirectToLogin() {
-        return "redirect:/login";
+        return "redirect:/teacher-login";
     }
     
-
-    @GetMapping("login")
-    public String login(@RequestParam(value = "mail", defaultValue = "") String mail){  //デフォルト値が空文字になるので、空文字の場合はログイン画面を表示
+    @GetMapping("teacher-login")
+    public String login(@RequestParam( value = "email", defaultValue = "") String email){
 
         //TODO: あとでセッション管理などに変更
-        if( !mail.isEmpty() ){
+        if( !email.isEmpty() ){
             return "teacher-dashboard";
         }
-
         return "teacher-login";
     }
 
-    @PostMapping("login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model ) {
-        
-        String sql = "SELECT mail FROM teacher WHERE mail = ? AND password = ?";
+    @PostMapping("teacher-login")
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
 
-        try{
+        String sql = "SELECT name FROM teacher WHERE mail = ? AND password = ?";
+
+        // teacher1@example.com       password123
+        try {
+            // データがなければEmptyResultDataAccessExceptionが発生する
             String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
-            model.addAttribute("mail", result);
+            model.addAttribute("email", email);
+            return "teacher-dashboard";
             
-        }catch(EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             String errMessage = "ユーザー名かパスワードが異なります";
             model.addAttribute("err", errMessage);
-            return "teacher-login";
+            return "teacher-login"; 
         }
-        return "teacher-dashboard";
-
     }
 
+    @GetMapping("")
+    public String student(){
+        return "redirect:/student";
+    }
 
+    @GetMapping("student")
+    public String studentLogin(){
+
+        return "student-login";
+
+    }
+    
+    @PostMapping("student-login")
+    public String studentLogin(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+
+        String sql = "SELECT name FROM student WHERE mail = ? AND password = ?";
+
+        try {
+            // データがなければEmptyResultDataAccessExceptionが発生する
+            String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
+            model.addAttribute("email", email);
+            return "student-dashboard";
+            
+        } catch (EmptyResultDataAccessException e) {
+            String errMessage = "ユーザー名かパスワードが異なります";
+            model.addAttribute("err", errMessage);
+            return "student-login"; 
+        }
+    }
         
 
 }

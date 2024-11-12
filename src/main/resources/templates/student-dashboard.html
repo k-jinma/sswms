@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生徒ダッシュボード</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 400px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .form-group {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .start-test-btn {
+            width: 80%; /* 少し小さくする */
+            padding: 8px; /* 高さも少し小さく */
+            font-size: 16px; /* 他のボタンより小さいフォントサイズ */
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .start-test-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>生徒ダッシュボード</h1>
+    <p>次の操作を選択してください:</p>
+
+    <!-- 問題を受けるボタン -->
+    <button onclick="showTestSelection()">問題を受ける</button>
+
+    <!-- テスト選択フィールドを「問題を受ける」と「成績確認」の間に表示 -->
+    <div class="form-group" id="testSelection" style="display: none;">
+        <label for="testName">テスト名またはテストIDを入力してください</label>
+        <input type="text" id="testName" placeholder="例: 数学テスト or TEST123" required>
+        <button class="start-test-btn" onclick="startTest()">テスト開始</button>
+    </div>
+
+    <!-- 成績確認ボタン -->
+    <a th:href="@{/view-grades(email=${email})}"><button>成績確認</button></a>
+</div>
+
+<script>
+    // テスト選択フィールドを表示する関数
+    function showTestSelection() {
+        document.getElementById('testSelection').style.display = 'block';
+    }
+
+    // テストを開始する関数
+    function startTest() {
+        const testName = document.getElementById('testName').value;
+
+        if (!testName) {
+            alert("テスト名またはテストIDを入力してください。");
+            return;
+        }
+
+        // テスト解答ページに移動し、テスト名またはIDをURLに渡す
+        window.location.href = `/take-test?testName=${encodeURIComponent(testName)}`;
+    }
+</script>
+
+</body>
+</html>
