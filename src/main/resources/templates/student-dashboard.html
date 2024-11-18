@@ -79,8 +79,8 @@
 
     <!-- テスト選択フィールドを「問題を受ける」と「成績確認」の間に表示 -->
     <div class="form-group" id="testSelection" style="display: none;">
-        <label for="testName">テスト名またはテストIDを入力してください</label>
-        <input type="text" id="testName" placeholder="例: 数学テスト or TEST123" required>
+        <label for="testId">テストIDを入力してください</label>
+        <input type="text" id="testId" placeholder="例: 数学テスト or TEST123" required>
         <button class="start-test-btn" onclick="startTest()">テスト開始</button>
     </div>
 
@@ -88,7 +88,7 @@
     <a th:href="@{/view-grades(email=${email})}"><button>成績確認</button></a>
 </div>
 
-<script>
+<script th:inline="javascript">
     // テスト選択フィールドを表示する関数
     function showTestSelection() {
         document.getElementById('testSelection').style.display = 'block';
@@ -96,15 +96,15 @@
 
     // テストを開始する関数
     function startTest() {
-        const testName = document.getElementById('testName').value;
+        const testId = document.getElementById('testId').value;
 
-        if (!testName) {
-            alert("テスト名またはテストIDを入力してください。");
+        if (!testId) {
+            alert("テストIDを入力してください。");
             return;
         }
-
+        const email = /*[[${email}]]*/ ''; // ログインユーザーのメールアドレスを取得
         // テスト解答ページに移動し、テスト名またはIDをURLに渡す
-        window.location.href = `/take-test?testName=${encodeURIComponent(testName)}`;
+        window.location.href = `/take-test?testId=${encodeURIComponent(testId)}&email=${encodeURIComponent(email)}`;
     }
 </script>
 
