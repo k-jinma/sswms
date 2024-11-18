@@ -49,7 +49,34 @@
     <h1>テスト解答</h1>
 
     <!-- テスト問題の表示エリア -->
-    <div id="testQuestions"></div>
+    <h2 th:text="${qList[0].testName}"></h2>
+
+<div th:each="q, stat : ${qList}" class="question-group">
+    <!-- 問題タイトル -->
+    <h3 th:text="'問題 ' + ${stat.index + 1}"></h3>
+    <!-- 問題文 -->
+    <p th:text="${q.qText}"></p>
+
+    <!-- 選択肢のグループ -->
+    <div>
+        <label>
+            <input type="radio" name="question-${stat.index + 1}" value="1" required>
+            <span th:text="${q.qSel1}"></span>
+        </label><br>
+        <label>
+            <input type="radio" name="question-${stat.index + 1}" value="2" required>
+            <span th:text="${q.qSel2}"></span>
+        </label><br>
+        <label>
+            <input type="radio" name="question-${stat.index + 1}" value="3" required>
+            <span th:text="${q.qSel3}"></span>
+        </label><br>
+        <label>
+            <input type="radio" name="question-${stat.index + 1}" value="4" required>
+            <span th:text="${q.qSel4}"></span>
+        </label><br>
+    </div>
+</div>
 
     <!-- テストの送信ボタン -->
     <button class="submit-btn" onclick="submitAnswers()">テストを送信</button>
