@@ -43,3 +43,13 @@ INSERT INTO student (mail, name, password) VALUES
 ('student1@example.com', 'David Brown', 'pass1234'),
 ('student2@example.com', 'Eve Davis', 'studPass'),
 ('student3@example.com', 'Frank Wilson', 'learn2024');
+
+
+CREATE TABLE IF NOT EXISTS answer (
+    mail VARCHAR(64),
+    test_id INT,
+    q_no INT,
+    a_no INT,
+    q_date TIMESTAMP,
+    PRIMARY KEY( mail, test_id, q_no )
+);
