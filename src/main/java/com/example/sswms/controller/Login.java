@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -24,25 +27,26 @@ public class Login {
     }
     
     @GetMapping("teacher-login")
-    public String login(@RequestParam( value = "email", defaultValue = "") String email){
+    public String login(HttpSession session){
 
-        //TODO: あとでセッション管理などに変更
-        if( !email.isEmpty() ){
+        // セッションにログイン情報があればダッシュボードにリダイレクト
+        if( session.getAttribute("email") != null && ! ( (String) session.getAttribute("email") ).isEmpty() ){
             return "teacher-dashboard";
         }
         return "teacher-login";
     }
 
     @PostMapping("teacher-login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session){
 
         String sql = "SELECT name FROM teacher WHERE mail = ? AND password = ?";
-
         // teacher1@example.com       password123
         try {
             // データがなければEmptyResultDataAccessExceptionが発生する
             String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
-            model.addAttribute("email", email);
+
+            session.setAttribute("email", email);
+            //model.addAttribute("email", email);
             return "teacher-dashboard";
             
         } catch (EmptyResultDataAccessException e) {

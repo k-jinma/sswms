@@ -169,9 +169,9 @@
             // 現在のURLを取得　
             const urlParams = new URLSearchParams(window.location.search);
             // emailパラメータを取得
-            const email = urlParams.get('email');
+            // const email = urlParams.get('email');
             // /loginにリダイレクト URLパラメータemailを渡す
-            window.location.href = '/login?email=' + encodeURIComponent(email);
+            window.location.href = '/teacher-login';
         })
         .catch(error => {
             console.error('エラーが発生しました:', error);
