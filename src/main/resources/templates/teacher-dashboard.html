@@ -40,23 +40,9 @@
 <div class="container">
     <h1 id="dashboardTitle">教師ダッシュボード</h1>
     <p>次の操作を選択してください:</p>
-    <a th:href="@{/create(email=${email})}"><button>問題作成</button></a>
-    <a href="teacher-grade-management.html"><button>成績管理</button></a>
-
+    <a th:href="@{/create}"><button>問題作成</button></a>
+    <a th:href="@{/teacher-grade-management}"><button>成績管理</button></a>
 </div>
-
-
-<script>
-    // JavaScriptを書くエリア
-    
-    // URLパラメータから教師IDを取得
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const teacherId = urlParams.get('teacher');
-
-    // if (teacherId) {
-    //     document.getElementById('dashboardTitle').inner
-    // }
-</script>
 
 </body>
 </html>
