@@ -22,7 +22,10 @@ public class Login {
     JdbcTemplate jdbcTemplate;
     
     @GetMapping("teacher")
-    public String redirectToLogin() {
+    public String redirectToLogin(HttpSession session) {
+        if( session.getAttribute("email") != null ){
+            return "teacher-dashboard";
+        }
         return "redirect:/teacher-login";
     }
     
@@ -45,8 +48,12 @@ public class Login {
             // データがなければEmptyResultDataAccessExceptionが発生する
             String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
 
+            // セッションにemailとnameをセット
             session.setAttribute("email", email);
-            //model.addAttribute("email", email);
+            session.setAttribute("name", result);
+            
+            model.addAttribute("email", email);
+            model.addAttribute("name", result);
             return "teacher-dashboard";
             
         } catch (EmptyResultDataAccessException e) {
@@ -62,21 +69,35 @@ public class Login {
     }
 
     @GetMapping("student")
-    public String studentLogin(){
+    public String studentLogin(HttpSession session, Model model){
 
+        // セッションにログイン情報があればダッシュボードにリダイレクト
+        if( session.getAttribute("email") != null && ! ( (String) session.getAttribute("email") ).isEmpty() ){
+
+            model.addAttribute("email", session.getAttribute("email"));
+            model.addAttribute("name", session.getAttribute("name"));
+            
+            return "student-dashboard";
+        }
         return "student-login";
 
     }
     
     @PostMapping("student-login")
-    public String studentLogin(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+    public String studentLogin(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session, Model model){
 
         String sql = "SELECT name FROM student WHERE mail = ? AND password = ?";
 
         try {
             // データがなければEmptyResultDataAccessExceptionが発生する
             String result = jdbcTemplate.queryForObject(sql, String.class, email, password);
+
+            session.setAttribute("email", email);
+            session.setAttribute("name", result);
+
             model.addAttribute("email", email);
+            model.addAttribute("name", result);
+
             return "student-dashboard";
             
         } catch (EmptyResultDataAccessException e) {
@@ -85,6 +106,18 @@ public class Login {
             return "student-login"; 
         }
     }
-        
 
+    @GetMapping("teacher-logout")
+    public String teacherLogout(HttpSession session){
+        session.invalidate();
+        
+        return "redirect:/teacher";
+    }
+
+    @GetMapping("student-logout")
+    public String studentLogout(HttpSession session){
+        session.invalidate();
+        
+        return "redirect:/student";
+    }
 }

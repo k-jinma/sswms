@@ -70,23 +70,29 @@
 </head>
 <body>
 
-<div class="container">
-    <h1>生徒ダッシュボード</h1>
-    <p>次の操作を選択してください:</p>
-
-    <!-- 問題を受けるボタン -->
-    <button onclick="showTestSelection()">問題を受ける</button>
-
-    <!-- テスト選択フィールドを「問題を受ける」と「成績確認」の間に表示 -->
-    <div class="form-group" id="testSelection" style="display: none;">
-        <label for="testId">テストIDを入力してください</label>
-        <input type="text" id="testId" placeholder="例: 数学テスト or TEST123" required>
-        <button class="start-test-btn" onclick="startTest()">テスト開始</button>
+    <div class="header">
+        <p>ユーザー: <span th:text="${name}"></span></p>
+        <a th:href="@{/student-logout}">ログアウト</a>
     </div>
 
-    <!-- 成績確認ボタン -->
-    <a th:href="@{/view-grades(email=${email})}"><button>成績確認</button></a>
-</div>
+    <div class="container">
+        <h1>生徒ダッシュボード</h1>
+        <p th:text="${message}"></p>
+        <p>次の操作を選択してください:</p>
+
+        <!-- 問題を受けるボタン -->
+        <button onclick="showTestSelection()">問題を受ける</button>
+
+        <!-- テスト選択フィールドを「問題を受ける」と「成績確認」の間に表示 -->
+        <div class="form-group" id="testSelection" style="display: none;">
+            <label for="testId">テストIDを入力してください</label>
+            <input type="text" id="testId" placeholder="例: 数学テスト or TEST123" required>
+            <button class="start-test-btn" onclick="startTest()">テスト開始</button>
+        </div>
+
+        <!-- 成績確認ボタン -->
+        <a th:href="@{/view-student-grades}"><button>成績確認</button></a>
+    </div>
 
 <script th:inline="javascript">
     // テスト選択フィールドを表示する関数
@@ -104,7 +110,7 @@
         }
         const email = /*[[${email}]]*/ ''; // ログインユーザーのメールアドレスを取得
         // テスト解答ページに移動し、テスト名またはIDをURLに渡す
-        window.location.href = `/take-test?testId=${encodeURIComponent(testId)}&email=${encodeURIComponent(email)}`;
+        window.location.href = `/take-test?testId=${encodeURIComponent(testId)}`;
     }
 </script>
 
