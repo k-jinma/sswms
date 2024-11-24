@@ -64,6 +64,8 @@ public class Grade {
             RowMapper<TeacherGrade> rowMapper = (rs, rowNum) -> {
                 TeacherGrade grade = new TeacherGrade();
                 grade.setTestId(rs.getInt("test_id"));
+                grade.setTeacherEmail(rs.getString("creator_mail"));
+                grade.setStudentEmail(rs.getString("respondent_mail"));
                 grade.setCorrectRatePercentage(rs.getDouble("correct_rate"));
                 return grade;
             };
@@ -110,6 +112,8 @@ public class Grade {
                         JOIN 
                         contents c
                         ON a.test_id = c.test_id AND a.q_no = c.q_no
+                        WHERE 
+                        a.mail = ?
                         GROUP BY 
                         a.test_id
                         ORDER BY 
@@ -125,7 +129,7 @@ public class Grade {
                 return grade;
             };
 
-            List<StudentGrade> result = jdbcTemplate.query(sql, rowMapper); // sql文, マッパー, プレースホルダーの値
+            List<StudentGrade> result = jdbcTemplate.query(sql, rowMapper, session.getAttribute("email")); // sql文, マッパー, プレースホルダーの値
             result.forEach( r -> {
                 System.out.println(r.getTest_id());
                 System.out.println(r.getCorrect_rate_percentage());

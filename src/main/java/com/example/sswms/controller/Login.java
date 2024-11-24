@@ -114,14 +114,14 @@ public class Login {
 
     @GetMapping("teacher-logout")
     public String teacherLogout(HttpSession session){
-        session.invalidate();
+        session.invalidate(); // セッションを破棄
         
         return "redirect:/teacher";
     }
 
     @GetMapping("student-logout")
     public String studentLogout(HttpSession session){
-        session.invalidate();
+        session.invalidate(); // セッションを破棄
         
         return "redirect:/student";
     }
