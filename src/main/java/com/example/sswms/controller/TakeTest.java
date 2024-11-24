@@ -122,7 +122,7 @@ public class TakeTest {
             // ロールバック処理
             jdbcTemplate.execute("ROLLBACK");
 
-            return "redirect:/take-test?testId=" + allParams.get("testId") + "&email=" + "test@test.com"; // エラーページにリダイレクト
+            return "redirect:/take-test?testId=" + allParams.get("testId");
         }
 
         return "student-dashboard";
