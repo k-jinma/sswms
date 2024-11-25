@@ -35,10 +35,13 @@ public class Login {
     }
     
     @GetMapping("teacher-login")
-    public String login(HttpSession session){
+    public String login(HttpSession session, Model model){
 
         // セッションにログイン情報があればダッシュボードにリダイレクト
         if( session.getAttribute("email") != null && ! ( (String) session.getAttribute("email") ).isEmpty() ){
+
+            model.addAttribute("email", session.getAttribute("email"));
+            model.addAttribute("name", session.getAttribute("name"));
             return "teacher-dashboard";
         }
         return "teacher-login";
