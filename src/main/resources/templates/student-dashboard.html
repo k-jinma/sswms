@@ -86,6 +86,7 @@
         <!-- テスト選択フィールドを「問題を受ける」と「成績確認」の間に表示 -->
         <div class="form-group" id="testSelection" style="display: none;">
             <label for="testId">テストIDを入力してください</label>
+            <label th:text="${message}"></label>  
             <input type="text" id="testId" placeholder="例: 数学テスト or TEST123" required>
             <button class="start-test-btn" onclick="startTest()">テスト開始</button>
         </div>

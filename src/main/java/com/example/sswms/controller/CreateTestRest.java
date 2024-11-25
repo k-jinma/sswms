@@ -54,7 +54,7 @@ public class CreateTestRest {
 
             }
 
-            return ResponseEntity.status(HttpStatus.OK).body("{\"testId\": \"999\"}");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"testId\": \"" + testId + "\"}");
             
         } catch (Exception e) {
             // 例外が発生した場合、トランザクションはロールバックされ、ここが実行されます
