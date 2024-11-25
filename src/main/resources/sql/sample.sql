@@ -53,3 +53,8 @@ CREATE TABLE IF NOT EXISTS answer (
     q_date TIMESTAMP,
     PRIMARY KEY( mail, test_id, q_no )
 );
+
+
+-- test テーブルへ列追加（修正）
+ALTER TABLE `test`
+ADD COLUMN `mail` VARCHAR(64);

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>テスト結果</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>テストID</th>
+                <th>生徒メールアドレス</th>
+                <th>正答率（％）</th>
+            </tr>
+        </thead>
+        <tbody th:each="grade : ${gradeList}">
+            <tr>
+                <td th:text="${grade.testId}"></td>
+                <td th:text="${grade.studentEmail}"></td>
+                <td th:text="${grade.correctRatePercentage}"></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="teacher">ダッシュボードに戻る</a>
+</body>
+</html>

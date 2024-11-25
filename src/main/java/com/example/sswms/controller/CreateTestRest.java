@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.sswms.model.Question;
 import com.example.sswms.model.TestData;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/")
 public class CreateTestRest {
@@ -20,16 +22,16 @@ public class CreateTestRest {
     JdbcTemplate jdbcTemplate;
 
     @PostMapping("/save-test")                              //モデル（model）クラス
-    public ResponseEntity<String> testCreate( @RequestBody TestData testData ){
+    public ResponseEntity<String> testCreate( @RequestBody TestData testData, HttpSession session) {
 
         try {
             String sql1_0 = "SELECT MAX(test_id) FROM test";
             int testId = jdbcTemplate.queryForObject(sql1_0, Integer.class) + 1;
 
-            String sql1_1 = "INSERT INTO test (test_id, test_name, q_count) VALUES (?, ?, ?)";
+            String sql1_1 = "INSERT INTO test (test_id, test_name, q_count, mail) VALUES (?, ?, ?, ?)";
             System.out.println(sql1_1);
             
-            jdbcTemplate.update(sql1_1, testId, testData.getTestName(), testData.getQuestions().size());
+            jdbcTemplate.update(sql1_1, testId, testData.getTestName(), testData.getQuestions().size(), session.getAttribute("email"));
         
             int qNo = 1;
             for( Question question : testData.getQuestions()) {
@@ -52,7 +54,7 @@ public class CreateTestRest {
 
             }
 
-            return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"データを受け取りました\"}");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"testId\": \"" + testId + "\"}");
             
         } catch (Exception e) {
             // 例外が発生した場合、トランザクションはロールバックされ、ここが実行されます

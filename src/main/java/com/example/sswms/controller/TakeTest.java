@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.sswms.model.TestWithContents;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -28,9 +30,28 @@ public class TakeTest {
     JdbcTemplate jdbcTemplate;
 
     @GetMapping("take-test")
-    public String takeTest(@RequestParam("testId") int testId, @RequestParam("email") String email, Model model){
+    public String takeTest(@RequestParam("testId") int testId, HttpSession session, Model model){
 
-        String sql = "SELECT test.test_id, test.test_name, contents.q_no, contents.q_text, contents.sel1, contents.sel2, contents.sel3, contents.sel4 FROM test " +
+        if( session.getAttribute("email") == null ){
+            return "redirect:/student";
+        }
+
+
+        String sql = "SELECT count(*) FROM test WHERE test_id = ?";
+        int count = jdbcTemplate.queryForObject(sql, Integer.class, testId);
+        if( count == 0 ){
+            model.addAttribute("message", "テストが見つかりませんでした。");
+            return "student-dashboard";
+        }
+
+        sql = "SELECT COUNT(*) FROM answer WHERE test_id = ? AND mail = ?";
+        count = jdbcTemplate.queryForObject(sql, Integer.class, testId, session.getAttribute("email"));
+        if( count > 0 ){
+            model.addAttribute("message", "回答済です");
+            return "student-dashboard";
+        }
+
+        sql = "SELECT test.test_id, test.test_name, contents.q_no, contents.q_text, contents.sel1, contents.sel2, contents.sel3, contents.sel4 FROM test " +
                         "LEFT JOIN contents ON test.test_id = contents.test_id " +
                             "WHERE test.test_id = ?";
 
@@ -69,7 +90,7 @@ public class TakeTest {
 
     @PostMapping("submit-test")
     @Transactional(rollbackFor = Exception.class)
-    public String submitTest(@RequestParam Map<String, String> allParams, Model model) {
+    public String submitTest(@RequestParam Map<String, String> allParams, HttpSession session, Model model) {
 
         AtomicInteger counter = new AtomicInteger(1); // カウント用の変数をAtomicIntegerで定義
         boolean isFirst = true; // 最初のエントリをスキップするためのフラグ
@@ -89,7 +110,7 @@ public class TakeTest {
                 // データベースに保存する処理
                 jdbcTemplate.update(
                     "INSERT INTO answer (mail, test_id, q_no, a_no) VALUES (?, ?, ?, ?)",
-                    "test@example.com", // メールアドレス (仮の値)
+                    session.getAttribute("email"), // メールアドレス (仮の値)
                     Integer.parseInt(allParams.get("testId")), // テストID
                     counter.getAndIncrement(),  // 質問番号 (カウントアップ)
                     value                       // 回答番号
@@ -101,7 +122,7 @@ public class TakeTest {
             // ロールバック処理
             jdbcTemplate.execute("ROLLBACK");
 
-            return "redirect:/take-test?testId=" + allParams.get("testId") + "&email=" + "test@test.com"; // エラーページにリダイレクト
+            return "redirect:/take-test?testId=" + allParams.get("testId");
         }
 
         return "student-dashboard";
