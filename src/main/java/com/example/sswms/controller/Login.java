@@ -83,7 +83,7 @@ public class Login {
             return "teacher-dashboard";
             
         } catch (EmptyResultDataAccessException e) {
-            String errMessage = "DBエラー";
+            String errMessage = "ユーザー名かパスワードが違います";
             model.addAttribute("err", errMessage);
             return "teacher-login"; 
         }
@@ -136,7 +136,7 @@ public class Login {
             return "student-dashboard";
             
         } catch (EmptyResultDataAccessException e) {
-            String errMessage = "DBエラー";
+            String errMessage = "ユーザー名かパスワードが違います";
             model.addAttribute("err", errMessage);
             return "student-login"; 
         }
