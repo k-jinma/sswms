@@ -7,10 +7,6 @@ import lombok.Data;
 @Data
 public class LoginForm {
 
-    @NotBlank(message = "名前を入力してください")
-    @Size(max = 60, message = "60文字以内で入力してください")
-    public String name;
-
     @NotBlank(message = "メールアドレスを入力してください")
     @Size(max = 64, message = "64文字以内で入力してください")
     public String email;
