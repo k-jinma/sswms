@@ -79,8 +79,16 @@ public class Register {
     }
 
     @PostMapping("create-student")
-    public String studentRegister(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+    public String studentRegister(@Validated RegisterForm form, BindingResult bindingResult, Model model) {
+
+        if(bindingResult.hasErrors()){
+            return "student-register";
+        }
         
+        String name = form.getName();
+        String email = form.getEmail();
+        String password = form.getPassword();
+
         System.out.println( name );
         System.out.println( email );
         System.out.println( password );
@@ -98,6 +106,7 @@ public class Register {
             String sql = "INSERT INTO student values( ?, ? ,? )";
             jdbcTemplate.update( sql , email, name, password );
             
+            model.addAttribute("loginForm", new LoginForm());   // ログインフォームを初期化
             return "student-login";
             
         } catch (Exception e) {
