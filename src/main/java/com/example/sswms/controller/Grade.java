@@ -34,6 +34,7 @@ public class Grade {
         String sql = """
                         SELECT 
                             t.test_id,
+                            t.test_name,
                             t.mail AS creator_mail,
                             a.mail AS respondent_mail,
                             ROUND(
@@ -45,25 +46,27 @@ public class Grade {
                                         WHEN a.a_no = 4 AND c.ans4 = 'Y' THEN 1
                                         ELSE 0
                                     END
-                                ) / COUNT(*), 
+                                ) / NULLIF(COUNT(*), 0), -- ゼロ除算を防ぐ
                                 2
                             ) AS correct_rate
                         FROM 
-                            answer a
-                        JOIN 
+                            test t
+                        LEFT JOIN 
+                            answer a ON t.test_id = a.test_id
+                        LEFT JOIN 
                             contents c ON a.test_id = c.test_id AND a.q_no = c.q_no
-                        JOIN 
-                            test t ON a.test_id = t.test_id
                         WHERE 
                             t.mail = ?
                         GROUP BY 
-                            t.test_id, t.mail, a.mail; 
+                            t.test_id, t.test_name, t.mail, a.mail;
+
                     """;
 
         try {
             RowMapper<TeacherGrade> rowMapper = (rs, rowNum) -> {
                 TeacherGrade grade = new TeacherGrade();
                 grade.setTestId(rs.getInt("test_id"));
+                grade.setTestName(rs.getString("test_name"));
                 grade.setTeacherEmail(rs.getString("creator_mail"));
                 grade.setStudentEmail(rs.getString("respondent_mail"));
                 grade.setCorrectRatePercentage(rs.getDouble("correct_rate"));
@@ -73,6 +76,7 @@ public class Grade {
             List<TeacherGrade> result = jdbcTemplate.query(sql, rowMapper, session.getAttribute("email")); // sql文, マッパー, プレースホルダーの値
             result.forEach( r -> {
                 System.out.println(r.getTestId());
+                System.out.println(r.getTestName());
                 System.out.println(r.getTeacherEmail());
                 System.out.println(r.getStudentEmail());
                 System.out.println(r.getCorrectRatePercentage());
