@@ -62,9 +62,13 @@
     <h1>教師ログイン</h1>
     <p>メールアドレスとパスワードを入力してください</p>
     <p class="error" th:text="${err}"></p>
-    <form action="/teacher-login" method="post">
-        <input type="email" name="email" id="teacherEmail" placeholder="メールアドレス">
-        <input type="password" name="password" id="password" placeholder="パスワード">
+    <form action="/teacher-login" method="post" th:object="${loginForm}">
+        <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        <input type="email" name="email" id="teacherEmail"  th:field="*{email}" placeholder="メールアドレス">
+
+        <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <input type="password" name="password" id="password" th:field="*{password}" placeholder="パスワード">
+
         <input type="submit" value="Login"></input>
     </form>
     <a href="/register" class="register-link">新規登録はこちら</a>

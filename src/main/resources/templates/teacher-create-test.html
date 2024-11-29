@@ -30,9 +30,10 @@
             font-weight: bold;
         }
         .form-group input, .form-group textarea {
-            width: 100%;
+            width: 97%;
             padding: 8px;
             margin-top: 5px;
+            margin-left: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
@@ -109,10 +110,10 @@
                 </div>
                 <div class="form-group">
                     <label>選択肢</label>
-                    <input type="text" name="choice${i}-1" placeholder="選択肢 1" required><br><br>
-                    <input type="text" name="choice${i}-2" placeholder="選択肢 2" required><br><br>
-                    <input type="text" name="choice${i}-3" placeholder="選択肢 3" required><br><br>
-                    <input type="text" name="choice${i}-4" placeholder="選択肢 4" required><br><br>
+                    <span>1</span><input type="text" name="choice${i}-1" placeholder="選択肢 1" required><br><br>
+                    <span>2</span><input type="text" name="choice${i}-2" placeholder="選択肢 2" required><br><br>
+                    <span>3</span><input type="text" name="choice${i}-3" placeholder="選択肢 3" required><br><br>
+                    <span>4</span><input type="text" name="choice${i}-4" placeholder="選択肢 4" required><br><br>
                 </div>
                 <div class="form-group">
                     <label for="correctAnswer${i}">正解 (1-4)</label>
@@ -140,6 +141,12 @@
             const choice3 = document.querySelector(`input[name="choice${i}-3"]`).value;
             const choice4 = document.querySelector(`input[name="choice${i}-4"]`).value;
             const correctAnswer = document.getElementById(`correctAnswer${i}`).value;
+
+            // クライアントサイドのバリデーション
+            if (!questionText || !choice1 || !choice2 || !choice3 || !choice4 || !correctAnswer) {
+                alert('すべてのフィールドを入力してください。');
+                return;
+            }
 
             questions.push({
                 questionText: questionText,

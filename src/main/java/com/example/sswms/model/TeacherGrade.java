@@ -4,6 +4,7 @@ public class TeacherGrade {
 
     private int testId;
     private String teacherEmail;
+    private String testName;
     private String studentEmail;
     private Double correctRatePercentage;
 
@@ -32,7 +33,11 @@ public class TeacherGrade {
     public void setCorrectRatePercentage(double correctRatePercentage) {
         this.correctRatePercentage = correctRatePercentage;
     }
-
-    
+    public String getTestName() {
+        return testName;
+    }
+    public void setTestName(String testName) {
+        this.testName = testName;
+    }
 
 }

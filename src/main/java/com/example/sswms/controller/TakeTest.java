@@ -116,6 +116,7 @@ public class TakeTest {
                     value                       // 回答番号
                 );
             }
+            
         } catch (Exception e) {
             // 例外が発生した場合の処理
             System.err.println("Error occurred while submitting test: " + e.getMessage());
@@ -124,6 +125,9 @@ public class TakeTest {
 
             return "redirect:/take-test?testId=" + allParams.get("testId");
         }
+
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("email", session.getAttribute("email"));
 
         return "student-dashboard";
     }

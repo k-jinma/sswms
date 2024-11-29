@@ -5,12 +5,16 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.sswms.form.LoginForm;
 
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -20,6 +24,11 @@ public class Login {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @ModelAttribute
+    public LoginForm formData() {
+        return new LoginForm();
+    }
     
     @GetMapping("teacher")
     public String redirectToLogin(HttpSession session, Model model) {
@@ -35,17 +44,29 @@ public class Login {
     }
     
     @GetMapping("teacher-login")
-    public String login(HttpSession session){
+    public String login(HttpSession session, Model model){
 
         // セッションにログイン情報があればダッシュボードにリダイレクト
         if( session.getAttribute("email") != null && ! ( (String) session.getAttribute("email") ).isEmpty() ){
+
+            model.addAttribute("email", session.getAttribute("email"));
+            model.addAttribute("name", session.getAttribute("name"));
             return "teacher-dashboard";
         }
         return "teacher-login";
     }
 
     @PostMapping("teacher-login")
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model, HttpSession session){
+    public String login(@Validated LoginForm form, BindingResult bindingResult, Model model, HttpSession session){
+
+        // 入力チェック
+        if( bindingResult.hasErrors() ){
+            return "teacher-login";
+        }
+
+        // LoginFormからメールアドレスとパスワードを取得
+        String email = form.getEmail();
+        String password = form.getPassword();
 
         String sql = "SELECT name FROM teacher WHERE mail = ? AND password = ?";
         // teacher1@example.com       password123
@@ -62,7 +83,7 @@ public class Login {
             return "teacher-dashboard";
             
         } catch (EmptyResultDataAccessException e) {
-            String errMessage = "ユーザー名かパスワードが異なります";
+            String errMessage = "ユーザー名かパスワードが違います";
             model.addAttribute("err", errMessage);
             return "teacher-login"; 
         }
@@ -89,7 +110,16 @@ public class Login {
     }
     
     @PostMapping("student-login")
-    public String studentLogin(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session, Model model){
+    public String studentLogin(@Validated LoginForm form, BindingResult bindingResult, HttpSession session, Model model){
+
+        // 入力チェック
+        if( bindingResult.hasErrors() ){
+            return "student-login";
+        }
+
+        // LoginFormからメールアドレスとパスワードを取得
+        String email = form.getEmail();
+        String password = form.getPassword();
 
         String sql = "SELECT name FROM student WHERE mail = ? AND password = ?";
 
@@ -106,7 +136,7 @@ public class Login {
             return "student-dashboard";
             
         } catch (EmptyResultDataAccessException e) {
-            String errMessage = "ユーザー名かパスワードが異なります";
+            String errMessage = "ユーザー名かパスワードが違います";
             model.addAttribute("err", errMessage);
             return "student-login"; 
         }

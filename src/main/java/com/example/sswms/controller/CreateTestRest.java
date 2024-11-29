@@ -25,8 +25,20 @@ public class CreateTestRest {
     public ResponseEntity<String> testCreate( @RequestBody TestData testData, HttpSession session) {
 
         try {
-            String sql1_0 = "SELECT MAX(test_id) FROM test";
-            int testId = jdbcTemplate.queryForObject(sql1_0, Integer.class) + 1;
+            String sql1_0 = """
+                                SELECT random_id
+                                FROM (
+                                    SELECT FLOOR(RAND() * 9000) + 1000 AS random_id
+                                ) AS subquery
+                                WHERE NOT EXISTS (
+                                    SELECT 1
+                                    FROM test
+                                    WHERE test.test_id = subquery.random_id
+                                )
+                                LIMIT 1;
+                            """;
+
+            int testId = jdbcTemplate.queryForObject(sql1_0, Integer.class);
 
             String sql1_1 = "INSERT INTO test (test_id, test_name, q_count, mail) VALUES (?, ?, ?, ?)";
             System.out.println(sql1_1);

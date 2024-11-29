@@ -27,6 +27,7 @@
         <thead>
             <tr>
                 <th>テストID</th>
+                <th>テスト名</th>
                 <th>生徒メールアドレス</th>
                 <th>正答率（％）</th>
             </tr>
@@ -34,6 +35,7 @@
         <tbody th:each="grade : ${gradeList}">
             <tr>
                 <td th:text="${grade.testId}"></td>
+                <td th:text="${grade.testName}"></td>
                 <td th:text="${grade.studentEmail}"></td>
                 <td th:text="${grade.correctRatePercentage}"></td>
             </tr>

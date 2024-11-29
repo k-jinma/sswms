@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,47 +49,18 @@
 <div class="container">
     <h1>新規登録</h1>
     <p class="err" th:text="${errMessage}"></p>
-    <form id="registerForm" action="/create-teacher" method="POST">
-        <input type="text" id="teacherName" name="name" placeholder="名前" required>
-        <input type="email" id="teacherEmail" name="email" placeholder="メールアドレス" required>
-        <input type="password" id="teacherPassword" name="password" placeholder="パスワード" required>
+    <form id="registerForm" action="/create-teacher" method="POST" th:object="${registerForm}">
+        <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <input type="text" id="teacherName" name="name" placeholder="名前" th:field="*{name}" required>
+
+        <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        <input type="email" id="teacherEmail" name="email" placeholder="メールアドレス" th:field="*{email}" required>
+
+        <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <input type="password" id="teacherPassword" name="password" placeholder="パスワード" th:field="*{password}" required>
         <input type="submit" value="登録">
     </form>
 </div>
-
-<!-- <script>
-    function register() {
-        const teacherName = document.getElementById('teacherName').value;
-        const teacherEmail = document.getElementById('teacherEmail').value;
-        const teacherPassword = document.getElementById('teacherPassword').value;
-
-        const formData = {
-            name: teacherName,
-            email: teacherEmail,
-            password: teacherPassword
-        };
-
-        fetch('/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('登録が完了しました！');
-                location.href = 'teacher-login.html';
-            } else {
-                alert('登録に失敗しました。');
-            }
-        })
-        .catch(error => {
-            console.error('エラーが発生しました:', error);
-        });
-    }
-</script> -->
 
 </body>
 </html>

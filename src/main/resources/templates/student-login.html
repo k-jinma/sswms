@@ -51,9 +51,13 @@
     <h1>生徒ログイン</h1>
     <p>メールアドレスとパスワードを入力してください</p>
     <p class="error" th:text="${err}"></p>
-    <form action="/student-login" method="post">
-        <input type="email" name="email" id="studentEmail" placeholder="メールアドレス" required>
-        <input type="password" name="password" id="studentPassword" placeholder="パスワード" required>
+    <form action="/student-login" method="post" th:object="${loginForm}">
+        <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        <input type="email" name="email" id="studentEmail" th:field="*{email}" placeholder="メールアドレス" required>
+
+        <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <input type="password" name="password" id="studentPassword" th:field="*{password}" placeholder="パスワード" required>
+
         <input type="submit" value="ログイン">
     </form>
     <a href="/student-register" class="register-link">新規登録はこちら</a>
