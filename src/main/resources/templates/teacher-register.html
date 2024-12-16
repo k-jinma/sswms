@@ -39,7 +39,7 @@
         input[type="submit"]:hover {
             background-color: #218838;
         }
-        .err {
+        .error {
             color: red;
         }
     </style>
@@ -48,7 +48,7 @@
 
 <div class="container">
     <h1>新規登録</h1>
-    <p class="err" th:text="${errMessage}"></p>
+    <p class="error" th:text="${errMessage}"></p>
     <form id="registerForm" action="/create-teacher" method="POST" th:object="${registerForm}">
         <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         <input type="text" id="teacherName" name="name" placeholder="名前" th:field="*{name}" required>

@@ -39,6 +39,10 @@
         button:hover {
             background-color: #218838;
         }
+        .error {
+            color: red;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -47,13 +51,13 @@
     <h1>生徒新規登録</h1>
     <p th:text="${errMessage}"></p>
     <form id="registerForm" action="/create-student" method="POST" th:object="${registerForm}">
-        <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
         <input type="text" id="studentName" name="name" placeholder="名前" th:field="*{name}" required>
 
-        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+        <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
         <input type="email" id="studentEmail" name="email" th:field="*{email}" placeholder="メールアドレス" required>
 
-        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        <span class="error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
         <input type="password" id="studentPassword" name="password" th:field="*{password}" placeholder="パスワード" required>
         <input type="submit" value="登録">
     </form>
