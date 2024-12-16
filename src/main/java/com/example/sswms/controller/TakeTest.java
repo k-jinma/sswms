@@ -30,7 +30,14 @@ public class TakeTest {
     JdbcTemplate jdbcTemplate;
 
     @GetMapping("take-test")
-    public String takeTest(@RequestParam("testId") int testId, HttpSession session, Model model){
+    public String takeTest(@RequestParam("testId") String testIdStr, HttpSession session, Model model){
+        int testId;
+        try {
+            testId = Integer.parseInt(testIdStr);
+        } catch (NumberFormatException e) {
+            model.addAttribute("message", "テストIDが無効です。");
+            return "student-dashboard";
+        }
 
         if( session.getAttribute("email") == null ){
             return "redirect:/student";
