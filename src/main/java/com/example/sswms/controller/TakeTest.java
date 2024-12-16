@@ -31,11 +31,15 @@ public class TakeTest {
 
     @GetMapping("take-test")
     public String takeTest(@RequestParam("testId") String testIdStr, HttpSession session, Model model){
+        
         int testId;
         try {
             testId = Integer.parseInt(testIdStr);
         } catch (NumberFormatException e) {
             model.addAttribute("message", "テストIDが無効です。");
+            // ログイン情報を渡す
+            model.addAttribute("email", session.getAttribute("email"));
+            model.addAttribute("name", session.getAttribute("name"));
             return "student-dashboard";
         }
 
